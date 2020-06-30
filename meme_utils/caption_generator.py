@@ -4,6 +4,9 @@ import os
 import pickle
 import requests
 
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 '''
 from tensorflow.compat.v1 import ConfigProto
 from tensorflow.compat.v1 import InteractiveSession
@@ -172,18 +175,3 @@ class CaptionGenerator:
             dec_input = tf.expand_dims([predicted_id], 0)
     
         return ' '.join(result).replace('<end>','')
-    
-    
-if __name__ == "__main__":
-    checkpoint_path = '../models/captiongen_ckpt'
-    tokenizer_path = '../models/tokenizer.pickle'
-    
-    cg = CaptionGenerator(checkpoint_path, tokenizer_path, top_k=5000, max_length=190)
-    imgs = ['https://cdn.discordapp.com/attachments/688531112942633003/725754050993455144/image0.jpg',
-            'https://cdn.discordapp.com/attachments/688531112942633003/725754490891796551/image0.jpg',
-            'https://cdn.discordapp.com/attachments/688531112942633003/725754491227340800/image1.jpg',
-            'https://cdn.discordapp.com/attachments/688531112942633003/725754786460205076/image0.png']
-    for img_link in imgs:
-        img, _ = cg.load_image_from_url(img_link)
-        caption = cg.evaluate_from_img(img)
-        print(caption)
